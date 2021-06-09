@@ -1,25 +1,25 @@
 class View {
     constructor() {
-        this.mainBlock = document.querySelector('#app');
-        this.input = document.createElement('input');
-        this.button = document.createElement('button');
-        this.taskList = document.createElement('ul');
+        this.input = document.createElement("input");
+        this.addButton = document.createElement("button");
+        this.mainBlock = document.querySelector("#app");
+        this.taskList = document.createElement("ul");
     }
-
-    initRender() {
-        this.mainBlock.append(this.input, this.button, this.taskList);
-        this.button.innerHTML = 'Add';
+  
+    initReneder() {
+        this.mainBlock.append(this.input, this.addButton, this.taskList);
+        this.addButton.innerHTML = "ADD";
     }
-
-    renderTask(el) {
-        let task = document.createElement('li');
-        this.taskList.appendChild(task);
-        task.innerHTML = el;
-
-        let delButton = document.createElement('button');
-        task.appendChild(delButton);
-        delButton.innerHTML = 'x';
-
+  
+  
+    renderTask(task) {
+        const item = document.createElement("li");
+        item.innerHTML = task;
+        this.taskList.appendChild(item);
+        const removeBtn = document.createElement('span');
+        removeBtn.innerHTML = ' &times;'
+        removeBtn.style.cursor = 'pointer';
+        item.appendChild(removeBtn);
         this.input.value = '';
     }
 }
@@ -29,32 +29,48 @@ class Model {
         this.view = view;
         this.tasks = [];
     }
-
+  
     addTask(value) {
         this.tasks.push(value);
-        console.log(this.tasks)
-        this.view.renderTask(this.tasks[this.tasks.length-1])
+        console.log(this.tasks);
+        this.view.renderTask(this.tasks[this.tasks.length - 1]);
     }
+
+//   removeTask() {
+
+//   }
+  
 }
 
 class Controller {
-    constructor(view, model) {        
-        this.view = view;
+    constructor(model, view) {
         this.model = model;
+        this.view = view;
+        this.addData = this.addData.bind(this);
     }
-
+    
     addData() {
-        let inpValue = this.view.input.value;
-        this.model.addTask(inpValue);
+        let value = this.view.input.value;
+        if(value.length == 0) return;
+        this.model.addTask(value);
+        this.view.taskList.lastChild.lastChild.addEventListener("click", () => console.log('sdmfosdmfs'));
+    }
+    
+    addHandle() {
+        this.view.addButton.addEventListener("click", this.addData);
     }
 
-    addHandle() {
-        this.view.button.addEventListener('click', () => this.addData());
-    }
+    // removeHandle() {
+    //     this.view.taskList.lastChild.lastChild.addEventListener("click", console.log('hello event'))
+    // }
 }
 
-const view = new View();
-const model = new Model(view);
-const controller = new Controller(view, model);
-controller.addHandle();
-view.initRender();
+
+(function init() {
+    const view = new View();
+    const model = new Model(view);
+    const controller = new Controller(model, view);
+    view.initReneder();
+    controller.addHandle();
+    // controller.removeHandle()
+})();
