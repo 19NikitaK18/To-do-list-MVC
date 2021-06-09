@@ -16,8 +16,9 @@ class View {
         const item = document.createElement("li");
         item.innerHTML = task;
         this.taskList.appendChild(item);
-        const removeBtn = document.createElement('span');
-        removeBtn.innerHTML = ' &times;'
+        const removeBtn = document.createElement('input');
+        removeBtn.setAttribute('type', 'reset');
+        removeBtn.setAttribute('value', "x");
         removeBtn.style.cursor = 'pointer';
         item.appendChild(removeBtn);
         this.input.value = '';
@@ -36,9 +37,22 @@ class Model {
         this.view.renderTask(this.tasks[this.tasks.length - 1]);
     }
 
-//   removeTask() {
+    removeTask(e) {
+        // console.log(e.target.parentNode.innerText);
+        // this.tasks.splice(e.target.parentNode.innerText);
+        let mustRemThisTask = e.target.parentNode.innerText;
+        console.log(mustRemThisTask);
+        for (let index = 0; index < this.tasks.length; index++) {
+            console.log(index);
+            
+        }
 
-//   }
+        
+
+
+        // this.tasks.slice(e.target, 1);
+        // console.log(this.tasks);
+    }
   
 }
 
@@ -53,7 +67,7 @@ class Controller {
         let value = this.view.input.value;
         if(value.length == 0) return;
         this.model.addTask(value);
-        this.view.taskList.lastChild.lastChild.addEventListener("click", () => console.log('sdmfosdmfs'));
+        this.view.taskList.lastChild.lastChild.addEventListener("click", this.model.removeTask);
     }
     
     addHandle() {
